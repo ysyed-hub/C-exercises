@@ -14,63 +14,69 @@ using namespace std;
 
 
 
-class node {
-public:
+/* class Node {
     int info;
-    class node *down;
-    node() {
-        info = 0;
+    
+public:
+    int Node_Info() {return info;}
+    class Node *down;
+    Node(int x) {
+        info = x;
         down = NULL;
     }
-};
+}; */
 
-typedef class node *nodeptr;
-nodeptr getnode(void);
 
-class stack {
-public:
+
+class Stack {
+    
+    class Node {
+        int info;
+        
+    public:
+        int Node_Info() {return info;}
+        class Node *down;
+        Node(int x) {
+            info = x;
+            down = NULL;
+        }
+    };
+    typedef class Node *nodeptr;
     nodeptr top;
-    int pop(stack *s);
-    nodeptr push(stack *s, int y);
-    stack() {
+    
+public:
+    int pop() {
+        if (top == NULL) {
+            cout << "Stack is empty" << endl;
+            return -1;
+        }
+        int y = top -> Node_Info();
+        nodeptr p = top;
+        top = top -> down;
+        free(p);
+        return y;
+    }
+    
+    void push(int y) {
+        nodeptr p = new Node(y);
+        p -> down = top;
+        top = p;
+    }
+    Stack() {
         top = NULL;
     }
 };
 
 typedef class stack *stackptr;
 
-int stack::pop(stackptr s) {
-    if (s -> top == NULL) {
-        cout << "Stack is empty" << endl;
-        return -1;
-    }
-    int y = (s -> top) -> info;
-    nodeptr p = s -> top;
-    s -> top = s -> top -> down;
-    free(p);
-    return y;
-}
-
-nodeptr stack::push(stackptr s, int y) {
-    nodeptr p = getnode();
-    p -> info = y;
-    p -> down = s -> top;
-    s -> top = p;
-    return p;
-}
-
-
 int main() {
-    stack s;
-    stackptr ps = &s;
-    ps -> push(ps, 1);
-    ps -> push(ps, 5);
-    int x = ps -> pop(ps);
-    int y = ps -> pop(ps);
+    Stack s;
+    s.push(1);
+    s.push(5);
+    int x = s.pop();
+    int y = s.pop();
     cout << x << " " << y << endl;
     return 0;
 }
 
-nodeptr getnode(void) {
-    return((nodeptr) malloc(sizeof(struct node)));
-}
+
