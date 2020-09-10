@@ -10,6 +10,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <map>
+#include <iterator>
 using namespace std;
 
 void PrintWordsAndCount(ifstream &file);
@@ -34,31 +36,27 @@ int main(int argc, const char * argv[]) {
 
 
 void PrintWordsAndCount(ifstream &file) {
-    struct FileWords {
-        string word;
-        int word_count;
-    };
-    vector<FileWords> words_and_count;
+    
+    map<string, int> words_and_count;
     
     string word_read;
+    map<string, int>::iterator itr;
     while (file >> word_read) {
         bool word_duplicate = false;
-        for (int i = 0; i < words_and_count.size(); i++) {
-            if (word_read == words_and_count[i].word) {
-                words_and_count[i].word_count++;
+        for (itr = words_and_count.begin(); itr != words_and_count.end(); itr++) {
+            if (word_read == itr -> first) {
+                (itr->second++);
                 word_duplicate = true;
                 break;
             }
         }
         
-        if (!word_duplicate) {
-            FileWords new_word = {word_read, 1};
-            words_and_count.push_back(new_word);
-        }
+        if (!word_duplicate)
+            words_and_count.insert(pair<string, int> (word_read, 1));
     }
     
-    for (int i = 0; i < words_and_count.size(); i++) {
-        cout << words_and_count[i].word + " " << words_and_count[i].word_count << endl;
+    for (itr = words_and_count.begin(); itr != words_and_count.end(); itr++) {
+        cout << itr->first + " " << itr->second << endl;
     }
     
 }
