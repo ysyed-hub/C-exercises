@@ -12,7 +12,7 @@
 #include <vector>
 using namespace std;
 
-void PrintWordsAndCount(ifstream &x);
+void PrintWordsAndCount(ifstream &file);
 
 int main(int argc, const char * argv[]) {
     
@@ -21,30 +21,27 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
-    ifstream x;
-    x.open(argv[1]);
-    if (!x) {
+    ifstream file(argv[1]);
+    if (!file) {
         cout << "Error opening file." << endl;
         return 0;
     }
 
-    PrintWordsAndCount(x);
+    PrintWordsAndCount(file);
 
     return 0;
 }
 
 
-void PrintWordsAndCount(ifstream &x) {
+void PrintWordsAndCount(ifstream &file) {
     struct FileWords {
         string word;
         int word_count;
     };
     vector<FileWords> words_and_count;
     
-    
-    while (!x.eof()) {
-        string word_read;
-        x >> word_read;
+    string word_read;
+    while (file >> word_read) {
         bool word_duplicate = false;
         for (int i = 0; i < words_and_count.size(); i++) {
             if (word_read == words_and_count[i].word) {
@@ -54,7 +51,7 @@ void PrintWordsAndCount(ifstream &x) {
             }
         }
         
-        if (word_duplicate == false) {
+        if (!word_duplicate) {
             FileWords new_word = {word_read, 1};
             words_and_count.push_back(new_word);
         }
